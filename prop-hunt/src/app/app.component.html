@@ -1,0 +1,48 @@
+<div class="container">
+  <mat-card>
+    <div class="example-container">
+  <label>Email</label>
+  <mat-form-field appearance="fill" style="margin-left: 10%;">
+    <mat-label>Email</mat-label>
+    <input matInput [(ngModel)]="property.email" (blur)="checkEmail()">
+  </mat-form-field>
+  <br>
+  <mat-form-field appearance="fill" style="margin-left: 14%;" >
+    <mat-label>Enter a location</mat-label>
+    <input matInput #search [disabled]="emailExists">
+  </mat-form-field>
+<br>
+<div style="margin-left: 14%;" >
+  <agm-map [latitude]="lat" [longitude]="lng"  style="height: 300px; width: 700px;" >
+    <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+  </agm-map>
+</div>
+
+<br>
+  <label>House No.</label>
+  <mat-form-field appearance="fill" style="margin-left: 10%;">
+    <mat-label>Textarea</mat-label>
+    <textarea matInput [(ngModel)]="houseList"></textarea>
+  </mat-form-field>
+</div>
+
+<button mat-raised-button color="primary" (click)="submitData()">Submit</button>
+  </mat-card>
+</div>
+
+
+
+<!-- 
+<div class="map-container">
+  <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" >
+    <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+  </agm-map>
+</div>
+
+<div id="pac-container">
+  <input #search id="pac-input" type="text" placeholder="Enter a location">
+</div> -->
+
+
+
+
