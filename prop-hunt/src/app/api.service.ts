@@ -26,4 +26,19 @@ export class ApiService {
       })
     );
   }
+  Get(apiUrl: string): Observable<any> {
+    //use this Header to send token.
+    const headers = new HttpHeaders({
+      "Content-Type": "application/JSON",
+    });
+    return this.http.get(apiUrl).pipe(
+      map((Response) => Response),
+      catchError((error) => {
+        this._snackBar.open("Some Error Occured, Please Try Again", "Error", {
+          duration: 2000,
+        });
+        return throwError(error);
+      })
+    );
+  }
 }

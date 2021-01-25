@@ -6,20 +6,20 @@ import { PropertyModel } from './db.model';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
+  // @Get()
+  // getHello(): string {
+  //   return this.appService.getHello();
+  // }
 
-  @Post('checkEmail')
-  checkEmail(@Body() email: any){
-    return this.appService.checkEmail(email);
-  }
+  // @Post('checkEmail')
+  // checkEmail(@Body() email: any){
+  //   return this.appService.checkEmail(email);
+  // }
   
-  @Post('insertEmail')
-  insertEmail(@Body() email: string){
-    return this.appService.insertEmail(email);
-  }
+  // @Post('insertEmail')
+  // insertEmail(@Body() email: string){
+  //   return this.appService.insertEmail(email);
+  // }
   
   @Post('insertProperty')
   insertProperty(@Body() property: PropertyModel){

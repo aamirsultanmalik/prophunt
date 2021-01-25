@@ -26,6 +26,7 @@ export class AppComponent {
   allowHouse:boolean=false;
   showSpinner:boolean=false;
   property: PropertyModel;
+  model: PropertAPIModel;
 
   @ViewChild('search')
   public searchElementRef: ElementRef;
@@ -35,6 +36,7 @@ export class AppComponent {
     ,public dialog: MatDialog) 
     { 
       this.property= new PropertyModel();
+      this.model= new PropertAPIModel();
     }
 
   ngOnInit() {
@@ -73,13 +75,12 @@ export class AppComponent {
   }
 
   checkEmail(){
-    debugger
-    const apiUrl="https://prop-hunt.herokuapp.com/"+"checkEmail"
-    let data = new Object( {email:this.property.email})
+    const apiUrl= "https://api.pipedrive.com/v1/users/find?term="+this.property.email+"&search_by_email=1&api_token=27465b4d24a7cfb7511616d4dd35713b2f7724cc"
+    // "https://prop-hunt.herokuapp.com/"+"checkEmail"
     this.showSpinner=true;
-    this.apiService.Post(apiUrl,data).subscribe(res=>{
+    this.apiService.Get(apiUrl).subscribe(res=>{
       this.showSpinner=false;
-      if(res.length==0){
+      if(res.data==null){
         this.emailError=true;
         this.emailExists=true;
         // this._snackBar.open("Email Not Found","",{
@@ -98,13 +99,15 @@ export class AppComponent {
 
   submitDataOnEnter(){
     debugger;
-  const apiUrl="https://prop-hunt.herokuapp.com/"+"insertProperty"
+    const apiUrl="https://bbteam.pipedrive.com/api/v1/persons?api_token=27465b4d24a7cfb7511616d4dd35713b2f7724cc";
     this.property.house_list = this.houseList.split("\n");
     let tempList= [];
     tempList.push(this.property.house_list[this.property.house_list.length-2]);
     this.property.house_list= tempList;
+    this.model.name=tempList[0].toString()+" "+this.property.formatted_address;
+    this.model.postal_address=tempList[0].toString()+" "+this.property.formatted_address;
     this.showSpinner=true;
-    this.apiService.Post(apiUrl,this.property).subscribe(res=>{
+    this.apiService.Post(apiUrl,this.model).subscribe(res=>{
       this.showSpinner=false;
       if(res){
         // this.dialog.open(DialogComponent,{ width: '250px'});
@@ -120,22 +123,26 @@ export class AppComponent {
   }
   submitData(){
     debugger;
-  const apiUrl="https://prop-hunt.herokuapp.com/"+"insertProperty"
+    const apiUrl="https://bbteam.pipedrive.com/api/v1/persons?api_token=27465b4d24a7cfb7511616d4dd35713b2f7724cc";
     this.property.house_list = this.houseList.split("\n");
     this.showSpinner=true;
-    this.apiService.Post(apiUrl,this.property).subscribe(res=>{
-      this.showSpinner=false;
-      if(res){
-        this.dialog.open(DialogComponent,{ width: '250px'});
-        // this._snackBar.open("data Saved Successfully","",{
-        //   duration:2000,
-        // });
-        this.searchElementRef.nativeElement.value='';
-        this.property=new PropertyModel();
-        this.houseList="";
-        this.emailExists=true;
-      }
-    });
+    for(let i=0;this.property.house_list.length-1;i++){
+      this.model.name=this.property.house_list[i].toString()+" "+this.property.formatted_address;
+      this.model.postal_address=this.property.house_list[i].toString()+" "+this.property.formatted_address;
+      this.apiService.Post(apiUrl,this.model).subscribe(res=>{
+        this.showSpinner=false;
+        if(res){
+          this.dialog.open(DialogComponent,{ width: '250px'});
+          // this._snackBar.open("data Saved Successfully","",{
+          //   duration:2000,
+          // });
+          this.searchElementRef.nativeElement.value='';
+          this.property=new PropertyModel();
+          this.houseList="";
+          this.emailExists=true;
+        }
+      });
+    }
   }
   
 }
@@ -144,4 +151,9 @@ export class PropertyModel {
   email: string;
   formatted_address: string;
   house_list:string[];
+}
+
+export class PropertAPIModel{
+  name:string;
+  postal_address:string;
 }
